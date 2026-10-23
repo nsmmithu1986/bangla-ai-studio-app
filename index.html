@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bangla AI Video Studio — Prototype</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#182033;--muted:#667085;--line:#e6eaf2;--blue:#3858e9;--blue2:#253fc4;--purple:#7957d5;--green:#087f5b;--soft:#edf1ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;color:var(--ink)}
+button,input,textarea,select{font:inherit}button{cursor:pointer;border:0}
+.app{max-width:1180px;margin:auto;min-height:100vh;display:grid;grid-template-columns:250px 1fr}
+.sidebar{background:#111a35;color:#fff;padding:24px 16px;display:flex;flex-direction:column;gap:22px}
+.brand{display:flex;align-items:center;gap:11px;padding:4px 8px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#7295ff,#a478f0);display:grid;place-items:center;font-size:22px}.brand b{font-size:16px;display:block}.brand small{color:#b9c4e4;font-size:11px}
+.nav{display:grid;gap:7px}.nav button{padding:12px 13px;border-radius:12px;text-align:left;background:transparent;color:#d5dcf1;display:flex;gap:11px;align-items:center}.nav button.active,.nav button:hover{background:#26345f;color:#fff}.nav .ico{width:22px;text-align:center}
+.sidebar-note{margin-top:auto;background:#202b4d;border:1px solid #34436c;border-radius:14px;padding:14px;color:#cbd5f1;font-size:12px;line-height:1.6}
+.main{min-width:0}.topbar{height:76px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px}.crumb{font-size:13px;color:var(--muted)}.top-actions{display:flex;align-items:center;gap:10px}.credits{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:12px}.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#e5eaff;color:#3048c5;font-weight:700}
+.content{padding:28px 30px 42px}.page{display:none}.page.active{display:block}.welcome{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:24px}.eyebrow{color:var(--blue);font-size:12px;font-weight:800;letter-spacing:.04em}.welcome h1{font-size:28px;line-height:1.25;margin:8px 0}.welcome p{margin:0;color:var(--muted);max-width:610px;font-size:14px;line-height:1.7}.primary{background:var(--blue);color:white;border-radius:11px;padding:12px 17px;font-weight:700;box-shadow:0 6px 15px #3858e926}.primary:hover{background:var(--blue2)}.secondary{background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-weight:650}.grid{display:grid;gap:17px}.stats{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:20px}.stat,.panel,.feature,.project,.plan{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:18px}.stat{display:flex;gap:13px;align-items:center}.stat-icon{width:43px;height:43px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:21px}.stat small{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;font-size:22px;margin-top:3px}.section-title{display:flex;justify-content:space-between;align-items:center;margin:24px 0 13px}.section-title h2{font-size:17px;margin:0}.section-title span{color:var(--muted);font-size:12px}
+.features{grid-template-columns:repeat(3,minmax(0,1fr))}.feature{cursor:pointer;transition:.15s}.feature:hover{border-color:#b5c2ff;transform:translateY(-2px)}.feature .emoji{font-size:28px}.feature h3{font-size:15px;margin:12px 0 6px}.feature p{font-size:12px;color:var(--muted);line-height:1.6;margin:0}.tag{display:inline-block;background:#edf8f3;color:#087f5b;padding:4px 8px;border-radius:99px;font-size:10px;font-weight:750;margin-top:12px}
+.two-col{grid-template-columns:minmax(0,1.3fr) minmax(260px,.7fr);align-items:start}.panel h2{font-size:18px;margin:0 0 5px}.sub{color:var(--muted);font-size:12px;line-height:1.6;margin:0 0 18px}.field{margin:15px 0}.field label{display:block;font-size:12px;font-weight:750;margin-bottom:8px}.field textarea,.field input,.field select{width:100%;border:1px solid #dce2ee;border-radius:10px;padding:12px;background:#fff;outline:none}.field textarea{resize:vertical;min-height:130px;line-height:1.7}.field textarea:focus,.field input:focus,.field select:focus{border-color:#8196ff;box-shadow:0 0 0 3px #3858e914}.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{padding:8px 11px;border:1px solid var(--line);background:#fff;border-radius:999px;font-size:12px}.chip.selected{border-color:var(--blue);background:var(--soft);color:var(--blue);font-weight:750}.hint{font-size:11px;color:var(--muted);line-height:1.6}.preview{border-radius:15px;background:linear-gradient(150deg,#172653,#493b91 60%,#d17c9e);color:white;aspect-ratio:9/12;max-height:330px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px;position:relative;overflow:hidden}.preview:before,.preview:after{content:"";position:absolute;border-radius:50%;background:#ffffff14}.preview:before{width:220px;height:220px;top:-65px;right:-70px}.preview:after{width:170px;height:170px;bottom:-60px;left:-50px}.preview .scene-icon{font-size:54px;z-index:1}.preview strong{z-index:1;margin-top:15px;font-size:17px}.preview span{z-index:1;font-size:12px;color:#e3e5ff;margin-top:7px}.cost-box{margin:15px 0;padding:13px;background:#f7f8fc;border-radius:12px;display:flex;justify-content:space-between;gap:10px;font-size:12px}.notice{padding:12px 14px;background:#fff8e7;border:1px solid #f2dfab;color:#76520b;border-radius:11px;font-size:12px;line-height:1.6;margin-top:15px}.success{background:#edf9f3;border:1px solid #cceedd;color:#087f5b;padding:12px;border-radius:11px;font-size:12px;line-height:1.6;margin-top:13px;display:none}
+.project-list{display:grid;gap:12px}.project{display:flex;align-items:center;gap:14px}.thumb{width:72px;height:72px;border-radius:12px;display:grid;place-items:center;font-size:28px;flex-shrink:0;background:linear-gradient(140deg,#c9d5ff,#f3d2eb)}.project-info{flex:1;min-width:0}.project-info strong{display:block;font-size:14px}.project-info small{color:var(--muted);font-size:11px;display:block;margin-top:5px}.status{font-size:10px;color:#9a6700;background:#fff4d8;border-radius:99px;padding:5px 8px;white-space:nowrap}
+.plans{grid-template-columns:repeat(3,minmax(0,1fr))}.plan h3{margin:0 0 6px;font-size:16px}.price{font-size:26px;font-weight:800;margin:13px 0}.plan p,.plan li{font-size:12px;color:var(--muted);line-height:1.7}.plan ul{padding-left:17px}.plan.featured{border:2px solid #7589ff;position:relative}.plan.featured:after{content:"জনপ্রিয়";position:absolute;top:13px;right:13px;color:#3858e9;background:#edf1ff;padding:4px 8px;border-radius:99px;font-size:10px;font-weight:800}
+.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed #cbd3e2;border-radius:14px;font-size:13px}
+footer{color:#8992a5;font-size:11px;padding:20px 0 0;text-align:center}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#172033;color:white;border-radius:12px;padding:12px 16px;font-size:13px;box-shadow:0 10px 30px #0002;display:none;max-width:90vw;z-index:5}
+@media(max-width:850px){.app{grid-template-columns:1fr}.sidebar{padding:12px 14px;gap:10px}.brand{padding:4px}.nav{display:flex;overflow-x:auto}.nav button{white-space:nowrap;padding:10px}.sidebar-note{display:none}.topbar{height:58px;padding:0 16px}.content{padding:22px 16px}.welcome h1{font-size:24px}.welcome{flex-direction:column}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:1/-1}.features{grid-template-columns:repeat(2,minmax(0,1fr))}.two-col{grid-template-columns:1fr}.plans{grid-template-columns:1fr}.preview{aspect-ratio:16/9;max-height:230px}.credits{padding:7px 9px}}
+@media(max-width:430px){.features{grid-template-columns:1fr 1fr}.feature{padding:13px}.feature h3{font-size:13px}.feature p{font-size:11px}.stats .stat{padding:12px}.stat strong{font-size:18px}.topbar .crumb{display:none}.project{align-items:flex-start}.status{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="logo">🎬</div><div><b>Bangla AI Studio</b><small>গল্প থেকে ভিডিও</small></div></div>
+  <nav class="nav">
+    <button class="active" data-page="home"><span class="ico">⌂</span> ড্যাশবোর্ড</button>
+    <button data-page="create"><span class="ico">✨</span> ভিডিও তৈরি</button>
+    <button data-page="projects"><span class="ico">▤</span> আমার প্রজেক্ট</button>
+    <button data-page="join"><span class="ico">🎞</span> ক্লিপ জোড়া</button>
+    <button data-page="plans"><span class="ico">◈</span> ক্রেডিট ও প্যাকেজ</button>
+  </nav>
+  <div class="sidebar-note"><b>প্রোটোটাইপ সংস্করণ</b><br>এখানে বোতাম ও স্ক্রিনগুলো পরীক্ষামূলকভাবে কাজ করে। বাস্তব AI ভিডিও তৈরির API এখনো সংযুক্ত নয়।</div>
+</aside>
+<main class="main">
+<header class="topbar"><div class="crumb">ওয়ার্কস্পেস / <span id="crumbPage">ড্যাশবোর্ড</span></div><div class="top-actions"><div class="credits">✦ ক্রেডিট: <b id="creditTop">100</b></div><div class="avatar">বি</div></div></header>
+<div class="content">
+<section class="page active" id="page-home">
+  <div class="welcome"><div><div class="eyebrow">আপনার ক্রিয়েটর স্টুডিও</div><h1>আসসালামু আলাইকুম! 👋<br>আজ কী ভিডিও বানাবেন?</h1><p>বাংলায় গল্প লিখুন, কার্টুন বা বাস্তবধর্মী ভিডিও বেছে নিন, তারপর আপনার দৃশ্যগুলো একত্র করুন।</p></div><button class="primary" onclick="showPage('create')">＋ নতুন ভিডিও তৈরি</button></div>
+  <div class="grid stats">
+    <div class="stat"><div class="stat-icon">🎟️</div><div><small>অবশিষ্ট ক্রেডিট</small><strong id="creditStat">100</strong></div></div>
+    <div class="stat"><div class="stat-icon">🎬</div><div><small>আমার প্রজেক্ট</small><strong id="projectCount">0</strong></div></div>
+    <div class="stat"><div class="stat-icon">🧩</div><div><small>ভিডিও এডিটর</small><strong>প্রস্তুত</strong></div></div>
+  </div>
+  <div class="section-title"><h2>আপনার সৃজনশীল টুলস</h2><span>এক জায়গায় সব</span></div>
+  <div class="grid features">
+    <div class="feature" onclick="setMode('cartoon');showPage('create')"><div class="emoji">🧸</div><h3>3D কার্টুন অ্যানিমেশন</h3><p>গল্পের চরিত্র ও দৃশ্যের জন্য প্রম্পট তৈরি করুন।</p><span class="tag">জনপ্রিয়</span></div>
+    <div class="feature" onclick="setMode('real');showPage('create')"><div class="emoji">🎥</div><h3>বাস্তবধর্মী AI ভিডিও</h3><p>সিনেমাটিক দৃশ্যের জন্য ভিডিও প্রম্পট সাজান।</p></div>
+    <div class="feature" onclick="setMode('image');showPage('create')"><div class="emoji">🖼️</div><h3>ছবি থেকে ভিডিও</h3><p>ছবি আপলোড করে অ্যানিমেশন পরিকল্পনা করুন।</p></div>
+    <div class="feature" onclick="setMode('voice');showPage('create')"><div class="emoji">🗣️</div><h3>বাংলা ডায়ালগ ও ভয়েস</h3><p>দৃশ্যভিত্তিক সংলাপ ও কণ্ঠস্বরের পরিকল্পনা।</p></div>
+    <div class="feature" onclick="showPage('join')"><div class="emoji">🎞️</div><h3>ভিডিও ক্লিপ জোড়া</h3><p>একাধিক পার্টের টাইমলাইন সাজান।</p></div>
+    <div class="feature" onclick="showPage('plans')"><div class="emoji">💎</div><h3>ক্রেডিট ও প্যাকেজ</h3><p>ফ্রি ও প্রিমিয়াম প্ল্যানের নমুনা দেখুন।</p></div>
+  </div>
+  <div class="section-title"><h2>সাম্প্রতিক প্রজেক্ট</h2><button class="secondary" onclick="showPage('projects')">সব দেখুন</button></div>
+  <div id="recentProjects" class="project-list"><div class="empty">এখনো কোনো প্রজেক্ট নেই। “নতুন ভিডিও তৈরি” দিয়ে শুরু করুন।</div></div>
+  <footer>Bangla AI Studio · প্রোটোটাইপ v0.1 · বাস্তব AI জেনারেশন এখনো সংযুক্ত নয়</footer>
+</section>
+
+<section class="page" id="page-create">
+  <div class="welcome"><div><div class="eyebrow">ভিডিও ক্রিয়েটর</div><h1>আপনার গল্পকে দৃশ্যে রূপ দিন</h1><p>গল্প, স্টাইল ও দৈর্ঘ্য বেছে নিন। এই প্রোটোটাইপে ভিডিও জেনারেশনের বদলে কাজের নমুনা প্রজেক্ট তৈরি হবে।</p></div></div>
+  <div class="grid two-col">
+    <div class="panel">
+      <h2>নতুন ভিডিও</h2><p class="sub">প্রথমে আপনার গল্প বা দৃশ্যের বর্ণনা লিখুন।</p>
+      <div class="field"><label>ভিডিওর ধরন</label><div class="chips" id="modeChips">
+        <button class="chip selected" data-mode="cartoon">🧸 3D কার্টুন</button><button class="chip" data-mode="real">🎥 বাস্তবধর্মী</button><button class="chip" data-mode="image">🖼️ ছবি থেকে ভিডিও</button><button class="chip" data-mode="voice">🗣️ ডায়ালগ ভিডিও</button>
+      </div></div>
+      <div class="field"><label for="story">আপনার গল্প / প্রম্পট</label><textarea id="story" placeholder="উদাহরণ: গ্রামের একটি ছেলে গাছ থেকে আম পেড়ে মায়ের কাছে নিয়ে যায়। মা খুশি হয়ে ছেলেকে জড়িয়ে ধরে..."></textarea></div>
+      <div class="field"><label for="titleInput">প্রজেক্টের নাম</label><input id="titleInput" placeholder="যেমন: মায়ের জন্য আম"></div>
+      <div class="field"><label for="duration">ভিডিওর মোট দৈর্ঘ্য</label><select id="duration"><option value="15">১৫ সেকেন্ড</option><option value="30">৩০ সেকেন্ড</option><option value="60" selected>৬০ সেকেন্ড</option><option value="90">৯০ সেকেন্ড</option><option value="120">১২০ সেকেন্ড</option></select></div>
+      <div class="field"><label for="ratio">ভিডিওর অনুপাত</label><select id="ratio"><option value="9:16">9:16 — Reels / Shorts</option><option value="16:9">16:9 — YouTube</option><option value="1:1">1:1 — Square</option></select></div>
+      <div class="field"><label>বাংলা কণ্ঠস্বর</label><div class="chips"><button class="chip selected" data-voice="female">নারী কণ্ঠ</button><button class="chip" data-voice="male">পুরুষ কণ্ঠ</button><button class="chip" data-voice="child">শিশু কণ্ঠ</button><button class="chip" data-voice="none">ভয়েস নয়</button></div></div>
+      <div class="field"><label for="dialogue">বাংলা ডায়ালগ (ঐচ্ছিক)</label><textarea id="dialogue" style="min-height:80px" placeholder="চরিত্র কী বলবে লিখুন..."></textarea></div>
+      <div class="cost-box"><span>আনুমানিক প্রোটোটাইপ ক্রেডিট</span><strong id="cost">20 ক্রেডিট</strong></div>
+      <button class="primary" style="width:100%" id="generateBtn">✨ নমুনা প্রজেক্ট তৈরি করুন</button>
+      <div class="success" id="generateSuccess"></div>
+      <div class="notice">এই বোতাম বাস্তব ভিডিও তৈরি করে না। এটি শুধু UI, প্রজেক্ট তালিকা ও ক্রেডিট ব্যবহারের নমুনা দেখায়। বাস্তব ভিডিওর জন্য AI API সংযোগ করতে হবে।</div>
+    </div>
+    <div class="panel"><h2>প্রিভিউ</h2><p class="sub">আপনার নির্বাচিত স্টাইলের নমুনা</p>
+      <div class="preview" id="preview"><div class="scene-icon" id="previewIcon">🧸</div><strong id="previewTitle">3D কার্টুন গল্প</strong><span id="previewSub">উল্লম্ব ভিডিও · ৬০ সেকেন্ড</span></div>
+      <div class="section-title"><h2 style="font-size:14px">তৈরির ধাপ</h2></div>
+      <div class="hint">১. গল্প লিখুন<br>২. স্টাইল ও দৈর্ঘ্য বেছে নিন<br>৩. দৃশ্যভিত্তিক ক্লিপ তৈরি হবে (API সংযোগের পর)<br>৪. বাংলা ভয়েস ও সাবটাইটেল যোগ করুন<br>৫. MP4 হিসেবে এক্সপোর্ট করুন</div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="page-projects">
+  <div class="welcome"><div><div class="eyebrow">আপনার কাজ</div><h1>আমার প্রজেক্ট</h1><p>এই ব্রাউজার সেশনে তৈরি করা নমুনা প্রজেক্টগুলো এখানে দেখা যাবে।</p></div><button class="primary" onclick="showPage('create')">＋ নতুন প্রজেক্ট</button></div>
+  <div id="allProjects" class="project-list"><div class="empty">এখনো কোনো প্রজেক্ট নেই।</div></div>
+</section>
+
+<section class="page" id="page-join">
+  <div class="welcome"><div><div class="eyebrow">ভিডিও এডিটর</div><h1>একাধিক ক্লিপ জোড়া লাগান</h1><p>আপনার ভিডিওর পার্টগুলো সঠিক ক্রমে সাজানোর নমুনা। প্রকৃত MP4 রেন্ডারিংয়ের জন্য পরে FFmpeg বা সমমানের ভিডিও প্রসেসিং যুক্ত হবে।</p></div></div>
+  <div class="panel"><h2>আপনার টাইমলাইন</h2><p class="sub">ক্লিপ যোগ করে ক্রম সাজান।</p>
+    <div class="field"><label for="clipName">ক্লিপের নাম</label><input id="clipName" placeholder="যেমন: পার্ট ১ — বাড়ির দৃশ্য"></div>
+    <div class="field"><label for="clipDuration">ক্লিপের দৈর্ঘ্য</label><select id="clipDuration"><option value="5">৫ সেকেন্ড</option><option value="10" selected>১০ সেকেন্ড</option><option value="15">১৫ সেকেন্ড</option><option value="20">২০ সেকেন্ড</option><option value="30">৩০ সেকেন্ড</option></select></div>
+    <button class="primary" id="addClip">＋ টাইমলাইনে ক্লিপ যোগ করুন</button>
+    <div class="section-title"><h2>ক্লিপের ক্রম</h2><span id="timelineTotal">মোট ০ সেকেন্ড</span></div>
+    <div id="timeline" class="project-list"><div class="empty">এখনো কোনো ক্লিপ যোগ করা হয়নি।</div></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="secondary" id="clearClips">সব সরান</button><button class="primary" id="joinClips">🎞️ জোড়া লাগানোর নমুনা চালান</button></div>
+    <div class="success" id="joinSuccess"></div>
+  </div>
+</section>
+
+<section class="page" id="page-plans">
+  <div class="welcome"><div><div class="eyebrow">ব্যবসার নমুনা</div><h1>ক্রেডিট ও প্যাকেজ</h1><p>এগুলো শুধু মূল্য নির্ধারণের ডেমো। লঞ্চের আগে AI API খরচ, পেমেন্ট ফি ও লাভের হিসাব করে প্রকৃত দাম ঠিক করতে হবে।</p></div></div>
+  <div class="grid plans">
+    <div class="plan"><h3>ফ্রি</h3><p>নতুন ব্যবহারকারীদের জন্য</p><div class="price">৳০</div><ul><li>শুরুতে ১০০ ডেমো ক্রেডিট</li><li>নমুনা প্রজেক্ট</li><li>সীমিত রেজল্যুশন (পরিকল্পিত)</li></ul><button class="secondary" style="width:100%" onclick="toast('আপনি ইতিমধ্যে ডেমো ফ্রি প্ল্যানে আছেন।')">বর্তমান প্ল্যান</button></div>
+    <div class="plan featured"><h3>ক্রিয়েটর</h3><p>নিয়মিত ভিডিও নির্মাতাদের জন্য</p><div class="price">৳২৯৯ <small style="font-size:11px;color:#667085">/ মাস (ডেমো)</small></div><ul><li>বেশি ক্রেডিট (পরিকল্পিত)</li><li>দীর্ঘ ভিডিও প্রজেক্ট</li><li>সাবটাইটেল ও এডিটিং টুল</li></ul><button class="primary" style="width:100%" onclick="toast('ডেমো: পেমেন্ট এখনো সংযুক্ত নয়।')">প্যাকেজ নির্বাচন</button></div>
+    <div class="plan"><h3>প্রো</h3><p>অধিক ব্যবহারের জন্য</p><div class="price">৳৭৯৯ <small style="font-size:11px;color:#667085">/ মাস (ডেমো)</small></div><ul><li>আরও বেশি ক্রেডিট (পরিকল্পিত)</li><li>উচ্চ মানের ভিডিও (পরিকল্পিত)</li><li>অগ্রাধিকার প্রসেসিং (পরিকল্পিত)</li></ul><button class="secondary" style="width:100%" onclick="toast('ডেমো: পেমেন্ট এখনো সংযুক্ত নয়।')">প্যাকেজ নির্বাচন</button></div>
+  </div>
+  <div class="notice">বাস্তব পেমেন্ট নেওয়ার আগে পেমেন্ট গেটওয়ে, ব্যবসায়িক যাচাই, রিফান্ড নীতি এবং নিরাপদ ক্রেডিট হিসাব তৈরি করা আবশ্যক। ডেমো বোতামে কোনো টাকা নেওয়া হয় না।</div>
+</section>
+</div>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const pageNames={home:"ড্যাশবোর্ড",create:"ভিডিও তৈরি",projects:"আমার প্রজেক্ট",join:"ক্লিপ জোড়া",plans:"ক্রেডিট ও প্যাকেজ"};
+let credits=100, projects=[], clips=[], mode="cartoon", voice="female";
+const modeData={cartoon:{icon:"🧸",title:"3D কার্টুন গল্প",sub:"কার্টুন অ্যানিমেশন"},real:{icon:"🎥",title:"বাস্তবধর্মী AI ভিডিও",sub:"সিনেমাটিক ভিডিও"},image:{icon:"🖼️",title:"ছবি থেকে ভিডিও",sub:"ইমেজ অ্যানিমেশন"},voice:{icon:"🗣️",title:"বাংলা ডায়ালগ ভিডিও",sub:"ভয়েস ও ঠোঁট মেলানো"}};
+function showPage(name){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("page-"+name).classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===name));document.getElementById("crumbPage").textContent=pageNames[name];window.scrollTo({top:0,behavior:"smooth"});}
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+function setMode(m){mode=m;document.querySelectorAll("[data-mode]").forEach(b=>b.classList.toggle("selected",b.dataset.mode===m));updatePreview();}
+document.querySelectorAll("[data-mode]").forEach(b=>b.addEventListener("click",()=>setMode(b.dataset.mode)));
+document.querySelectorAll("[data-voice]").forEach(b=>b.addEventListener("click",()=>{voice=b.dataset.voice;document.querySelectorAll("[data-voice]").forEach(x=>x.classList.toggle("selected",x===b));}));
+function updatePreview(){let d=modeData[mode];document.getElementById("previewIcon").textContent=d.icon;document.getElementById("previewTitle").textContent=d.title;document.getElementById("previewSub").textContent=(document.getElementById("ratio").value==="9:16"?"উল্লম্ব":document.getElementById("ratio").value==="16:9"?"আড়াআড়ি":"স্কয়ার")+" ভিডিও · "+document.getElementById("duration").value+" সেকেন্ড";let dur=+document.getElementById("duration").value;document.getElementById("cost").textContent=Math.ceil(dur/3)+" ক্রেডিট (ডেমো)";}
+document.getElementById("duration").addEventListener("change",updatePreview);document.getElementById("ratio").addEventListener("change",updatePreview);
+function updateCredits(){document.getElementById("creditTop").textContent=credits;document.getElementById("creditStat").textContent=credits;document.getElementById("projectCount").textContent=projects.length;}
+function addProject(p){projects.unshift(p);renderProjects();updateCredits();}
+function renderProjects(){let html=projects.map((p,i)=>`<div class="project"><div class="thumb">${modeData[p.mode].icon}</div><div class="project-info"><strong>${esc(p.title)}</strong><small>${p.duration} সেকেন্ড · ${esc(p.kind)} · ${p.ratio} · নমুনা প্রজেক্ট</small></div><span class="status">ডেমো তৈরি</span></div>`).join("");let empty='<div class="empty">এখনো কোনো প্রজেক্ট নেই। “নতুন ভিডিও তৈরি” দিয়ে শুরু করুন।</div>';document.getElementById("allProjects").innerHTML=html||empty;document.getElementById("recentProjects").innerHTML=projects.slice(0,2).map(p=>`<div class="project"><div class="thumb">${modeData[p.mode].icon}</div><div class="project-info"><strong>${esc(p.title)}</strong><small>${p.duration} সেকেন্ড · ${esc(p.kind)}</small></div><span class="status">ডেমো</span></div>`).join("")||empty;}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+document.getElementById("generateBtn").addEventListener("click",()=>{let story=document.getElementById("story").value.trim();if(!story){toast("আগে আপনার গল্প বা প্রম্পট লিখুন।");document.getElementById("story").focus();return;}let duration=+document.getElementById("duration").value,cost=Math.ceil(duration/3);if(credits<cost){toast("ডেমো ক্রেডিট যথেষ্ট নেই।");return;}credits-=cost;let title=document.getElementById("titleInput").value.trim()||story.slice(0,32)+(story.length>32?"…":"");addProject({title,story,duration,ratio:document.getElementById("ratio").value,mode,kind:modeData[mode].title});let s=document.getElementById("generateSuccess");s.style.display="block";s.textContent=`নমুনা প্রজেক্ট তৈরি হয়েছে: “${title}”। ${cost} ডেমো ক্রেডিট কাটা হয়েছে। এটি আসল ভিডিও নয়; AI API যুক্ত হলে ভিডিও তৈরি হবে।`;updatePreview();});
+function toast(msg){let t=document.getElementById("toast");t.textContent=msg;t.style.display="block";clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.style.display="none",2600);}
+function renderClips(){let total=clips.reduce((a,c)=>a+c.duration,0);document.getElementById("timelineTotal").textContent="মোট "+total+" সেকেন্ড";document.getElementById("timeline").innerHTML=clips.map((c,i)=>`<div class="project"><div class="thumb">🎬</div><div class="project-info"><strong>${i+1}. ${esc(c.name)}</strong><small>${c.duration} সেকেন্ড · টাইমলাইন ক্লিপ</small></div><button class="secondary" onclick="moveClip(${i},-1)" ${i===0?"disabled":""}>↑</button><button class="secondary" onclick="moveClip(${i},1)" ${i===clips.length-1?"disabled":""}>↓</button><button class="secondary" onclick="removeClip(${i})">✕</button></div>`).join("")||'<div class="empty">এখনো কোনো ক্লিপ যোগ করা হয়নি।</div>';document.getElementById("joinSuccess").style.display="none";}
+document.getElementById("addClip").addEventListener("click",()=>{let name=document.getElementById("clipName").value.trim();if(!name){toast("ক্লিপের একটি নাম লিখুন।");return;}clips.push({name,duration:+document.getElementById("clipDuration").value});document.getElementById("clipName").value="";renderClips();});
+function moveClip(i,delta){let j=i+delta;if(j<0||j>=clips.length)return;[clips[i],clips[j]]=[clips[j],clips[i]];renderClips();}
+function removeClip(i){clips.splice(i,1);renderClips();}
+document.getElementById("clearClips").addEventListener("click",()=>{clips=[];renderClips();});
+document.getElementById("joinClips").addEventListener("click",()=>{if(clips.length<2){toast("জোড়া লাগানোর নমুনার জন্য অন্তত ২টি ক্লিপ যোগ করুন।");return;}let s=document.getElementById("joinSuccess");s.style.display="block";s.textContent=`নমুনা টাইমলাইন প্রস্তুত: ${clips.length}টি ক্লিপ, মোট ${clips.reduce((a,c)=>a+c.duration,0)} সেকেন্ড। প্রকৃত MP4 ফাইল তৈরি করতে ভিডিও প্রসেসিং সার্ভিস যুক্ত করতে হবে।`;});
+updateCredits();updatePreview();
+</script>
+</body>
+</html>
